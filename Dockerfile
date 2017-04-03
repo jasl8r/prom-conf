@@ -13,4 +13,4 @@ ADD prometheus.yml.tmpl /
 VOLUME /etc/prom-conf
 
 CMD ["dockerize", \
-	 "-template" "/prometheus.yml.tmpl:/etc/prom-conf/prometheus.yml"]
+	 "-template", "/prometheus.yml.tmpl:/etc/prom-conf/prometheus.yml"]
