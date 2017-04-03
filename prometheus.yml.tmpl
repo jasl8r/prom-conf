@@ -5,29 +5,41 @@ global:
       monitor: 'exporter-metrics'                                                
                                                                                 
 scrape_configs:
+{{- if .Env.PROM_NODE_HOSTS }}
 - job_name: 'HostsMetrics'
   dns_sd_configs:
   - names:
-    - node-exporter
+    {{- range $host := split .Env.PROM_NODE_HOSTS ":" }}
+    - {{ $host }}
+    {{- end }}
     refresh_interval: 15s
     type: A
     port: 9100
+{{- end }}
 
+{{- if .Env.PROM_CADVISOR_HOSTS }}
 - job_name: 'ContainerMetrics'
   dns_sd_configs:
   - names:
-    - cadvisor
+    {{- range $host := split .Env.PROM_CADVISOR_HOSTS ":" }}
+    - {{ $host }}
+    {{- end }}
     refresh_interval: 15s
     type: A
     port: 8080
+{{- end }}
 
+{{- if .Env.PROM_RANCHER_HOSTS }}
 - job_name: 'rancher-api'
   dns_sd_configs:
   - names:
-    - 'prometheus-rancher-exporter'
+    {{- range $host := split .Env.PROM_RANCHER_HOSTS ":" }}
+    - {{ $host }}
+    {{- end }}
     refresh_interval: 15s
     type: A
     port: 9173
+{{- end }}
 
 - job_name: 'Prometheus'
   static_configs:

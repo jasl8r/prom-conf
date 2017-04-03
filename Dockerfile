@@ -1,9 +1,16 @@
-#Prometheus Config Store Dockerfile
-FROM alpine
-MAINTAINER Ed Marshall (ed.marshall@infinityworks.com)
+FROM alpine:3.4
+MAINTAINER Jeremy Slater (jasl8r@alum.wpi.edu)
 
-RUN mkdir -p /etc/prom-conf/
+ENV DOCKERIZE_VERSION v0.3.0
 
-ADD prometheus.yml /etc/prom-conf/prometheus.yml
+RUN apk --no-cache add openssl \
+ && wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+ && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+ && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-CMD ["/bin/sh"]
+ADD prometheus.yml.tmpl /
+
+VOLUME /etc/prom-conf
+
+CMD ["dockerize", \
+	 "-template" "/prometheus.yml.tmpl:/etc/prom-conf/prometheus.yml"]

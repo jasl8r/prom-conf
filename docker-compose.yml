@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  prom-conf:
+    environment:
+      PROM_NODE_HOSTS: hostA:hostB:hostC
+      PROM_CONTAINER_HOSTS: hostA:hostB:hostC
+      PROM_RANCHER_HOSTS: hostA:hostB:hostC
